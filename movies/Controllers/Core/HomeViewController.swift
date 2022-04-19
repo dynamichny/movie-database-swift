@@ -8,7 +8,7 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-        
+    
     private var popularMoviesViewModels = [PopularMoviesCollectionViewCellViewModel]()
     
     private var collectionView: UICollectionView = UICollectionView(
@@ -32,7 +32,20 @@ class HomeViewController: UIViewController {
             )
             group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
             
-            return NSCollectionLayoutSection(group: group)
+            let section = NSCollectionLayoutSection(group: group)
+            
+            section.boundarySupplementaryItems = [
+                NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(50)
+                    ),
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+            ]
+            
+            return section
         }
     )
     
@@ -83,12 +96,19 @@ class HomeViewController: UIViewController {
             forCellWithReuseIdentifier: PopularMoviesCollectionViewCell.identifier
         )
         
+        collectionView.register(
+            SectionHeaderCollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SectionHeaderCollectionReusableView.identifier
+        )
+        
         
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.backgroundColor = .systemBackground
     }
 }
+
 
 extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -102,9 +122,23 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         ) as? PopularMoviesCollectionViewCell else {
             return UICollectionViewCell()
         }
-            
+        
         cell.configure(with: popularMoviesViewModels[indexPath.row])
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SectionHeaderCollectionReusableView.identifier,
+            for: indexPath
+        ) as? SectionHeaderCollectionReusableView else {
+            return UICollectionReusableView()
+        }
+        
+        header.configure(with: "Popular movies")
+        
+        return header
     }
 }

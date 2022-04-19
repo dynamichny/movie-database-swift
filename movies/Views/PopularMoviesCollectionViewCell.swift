@@ -57,9 +57,9 @@ class PopularMoviesCollectionViewCell: UICollectionViewCell {
         
         nameLabel.frame = CGRect(
             x: 0,
-            y: posterImageView.frame.maxY + 10,
-            width: contentView.frame.width,
-            height: contentView.frame.height - posterImageView.frame.maxY + 20
+            y: posterImageView.bottom + 10,
+            width: contentView.width,
+            height: contentView.height - posterImageView.bottom
         )
     }
     
@@ -71,7 +71,6 @@ class PopularMoviesCollectionViewCell: UICollectionViewCell {
     
     func configure(with viewModel: PopularMoviesCollectionViewCellViewModel) {
         nameLabel.text = viewModel.title
-        print(viewModel.coverURL)
         posterImageView.sd_setImage(with: viewModel.coverURL, completed: nil)
     }
     
