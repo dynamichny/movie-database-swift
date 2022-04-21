@@ -46,6 +46,29 @@ final class APICaller {
             }
     }
     
+    // MARK: - Movie details
+    
+    func getMovieDetailsFrom(id movieId: Int, compelition: @escaping (Result<MovieDetails, Error>) -> Void) {
+        createRequest(
+            with: URL(string: Constants.baseURL + "/movie/\(movieId)?api_key=\(Constants.apiKey)"),
+            type: .GET) { request in
+                let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                    guard let data = data, error == nil else {
+                        compelition(.failure(APIError.failedToGetData))
+                        return
+                    }
+                    do {
+                        let response = try JSONDecoder().decode(MovieDetails.self, from: data)
+                        compelition(.success(response))
+                    }
+                    catch {
+                        compelition(.failure(error))
+                    }
+                }
+                task.resume()
+            }
+    }
+    
     
     // MARK: - Private
     

@@ -10,6 +10,7 @@ import UIKit
 class HomeViewController: UIViewController {
     
     private var popularMoviesViewModels = [PopularMoviesCollectionViewCellViewModel]()
+    private var movies = [Movie]()
     
     private var collectionView: UICollectionView = UICollectionView(
         frame: .zero,
@@ -72,6 +73,7 @@ class HomeViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let model):
+                    self?.movies = model.results
                     self?.popularMoviesViewModels = model.results.compactMap({
                         return PopularMoviesCollectionViewCellViewModel(
                             title: $0.title,
@@ -140,5 +142,13 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         header.configure(with: "Popular movies")
         
         return header
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let movie = movies[indexPath.row]
+        let vc = MovieDetailsViewController(movie: movie)
+        vc.title = movie.title
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
