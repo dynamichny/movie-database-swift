@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct PopularMoviesResponse: Codable {
+struct CommonMoviesResponse: Codable {
     let results: [Movie]
 }

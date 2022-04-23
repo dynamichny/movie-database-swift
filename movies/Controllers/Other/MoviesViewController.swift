@@ -7,13 +7,14 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class MoviesViewController: UIViewController {
     
-    private var popularMoviesViewModels = [CommonMovieCollectionViewCellViewModel]()
+    private var movieViewModels = [CommonMovieCollectionViewCellViewModel]()
     private var movies = [Movie]()
+    private let genre: Genre
     
-    private var popularMoviesPage = 1
-    private var fetchingMovies = false
+    private var page = 1
+    private var isFetching = false
     
     private var collectionView: UICollectionView = UICollectionView(
         frame: .zero,
@@ -38,26 +39,27 @@ class HomeViewController: UIViewController {
             
             let section = NSCollectionLayoutSection(group: group)
             
-            section.boundarySupplementaryItems = [
-                NSCollectionLayoutBoundarySupplementaryItem(
-                    layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(1),
-                        heightDimension: .absolute(50)
-                    ),
-                    elementKind: UICollectionView.elementKindSectionHeader,
-                    alignment: .top
-                )
-            ]
-            
             return section
         }
     )
     
-    // MARK: - Life cycle
+    // MARK: - Init
     
+    init(genre: Genre) {
+        self.genre = genre
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
+    
+    // MARK: - Life cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        title  = "Home"
+        title  = genre.name
         view.backgroundColor = .systemBackground
         
         configureCollectionView()
@@ -72,16 +74,16 @@ class HomeViewController: UIViewController {
     // MARK: - Private
     
     private func fetchData() {
-        if fetchingMovies {
+        if isFetching {
            return
         }
-        fetchingMovies = true
-        APICaller.shared.getPopularMovies(page: popularMoviesPage, completion: { [weak self] result in
+        isFetching = true
+        APICaller.shared.getMoviesBy(genreId: genre.id, page: page, compelition: { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let model):
                     self?.movies.append(contentsOf: model.results)
-                    self?.popularMoviesViewModels.append(
+                    self?.movieViewModels.append(
                         contentsOf: model.results.compactMap({
                             return CommonMovieCollectionViewCellViewModel(
                                 title: $0.title,
@@ -95,8 +97,8 @@ class HomeViewController: UIViewController {
                     print(error.localizedDescription)
                     break
                 }
-                self?.popularMoviesPage += 1
-                self?.fetchingMovies = false
+                self?.page += 1
+                self?.isFetching = false
             }
         })
     }
@@ -123,9 +125,9 @@ class HomeViewController: UIViewController {
 }
 
 
-extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return popularMoviesViewModels.count
+        return movieViewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -136,24 +138,11 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return UICollectionViewCell()
         }
         
-        cell.configure(with: popularMoviesViewModels[indexPath.row])
+        cell.configure(with: movieViewModels[indexPath.row])
         
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let header = collectionView.dequeueReusableSupplementaryView(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: SectionHeaderCollectionReusableView.identifier,
-            for: indexPath
-        ) as? SectionHeaderCollectionReusableView else {
-            return UICollectionReusableView()
-        }
-        
-        header.configure(with: "Popular movies")
-        
-        return header
-    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movie = movies[indexPath.row]
@@ -164,7 +153,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if popularMoviesViewModels.count - indexPath.row < 5 {
+        if movieViewModels.count - indexPath.row < 5 {
             fetchData()
         }
     }

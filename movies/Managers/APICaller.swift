@@ -12,10 +12,23 @@ final class APICaller {
     
     private init() {}
     
+    enum ImagesSizes: String {
+        case Backdrop = "w780"
+        case Big = "w342"
+        case Medium = "w185"
+        case Small = "w92"
+    }
+    
     struct Constants {
         static let baseURL = "https://api.themoviedb.org/3"
         static let apiKey = "485dd1f1ee71083619712efed20ee4bb"
-        static let imagesURL = "https://image.tmdb.org/t/p/w500"
+        static func imagesURL(size: ImagesSizes?) -> String {
+            if size != nil {
+                return "https://image.tmdb.org/t/p/\(size!.rawValue)"
+            }
+            return "https://image.tmdb.org/t/p/original"
+        }
+        static let queries = "region=\(Locale.current.regionCode?.uppercased() ?? "EN")&language=\(Locale.current.identifier)&api_key=\(Constants.apiKey)"
     }
     
     enum APIError: Error {
@@ -24,9 +37,9 @@ final class APICaller {
     
     // MARK:  - Popular movies
     
-    func getPopularMovies(completion: @escaping (Result<PopularMoviesResponse, Error>) -> Void) {
+    func getPopularMovies(page: Int, completion: @escaping (Result<CommonMoviesResponse, Error>) -> Void) {
         createRequest(
-            with: URL(string: Constants.baseURL + "/movie/popular?api_key=\(Constants.apiKey)"),
+            with: URL(string: Constants.baseURL + "/movie/popular?page=\(page)&\(Constants.queries)"),
             type: .GET) { request in
                 let task = URLSession.shared.dataTask(with: request) { data, _, error in
                     guard let data = data, error == nil else {
@@ -35,7 +48,7 @@ final class APICaller {
                     }
                     
                     do {
-                        let response = try JSONDecoder().decode(PopularMoviesResponse.self, from: data)
+                        let response = try JSONDecoder().decode(CommonMoviesResponse.self, from: data)
                         completion(.success(response))
                     }
                     catch {
@@ -50,7 +63,7 @@ final class APICaller {
     
     func getMovieDetailsFrom(id movieId: Int, compelition: @escaping (Result<MovieDetails, Error>) -> Void) {
         createRequest(
-            with: URL(string: Constants.baseURL + "/movie/\(movieId)?api_key=\(Constants.apiKey)"),
+            with: URL(string: Constants.baseURL + "/movie/\(movieId)?\(Constants.queries)"),
             type: .GET) { request in
                 let task = URLSession.shared.dataTask(with: request) { data, _, error in
                     guard let data = data, error == nil else {
@@ -60,6 +73,76 @@ final class APICaller {
                     do {
                         let response = try JSONDecoder().decode(MovieDetails.self, from: data)
                         compelition(.success(response))
+                    }
+                    catch {
+                        compelition(.failure(error))
+                    }
+                }
+                task.resume()
+            }
+    }
+    
+    // MARK: - Search
+    
+    func getMoviesBy(query: String, compelition: @escaping (Result<CommonMoviesResponse, Error>) -> Void) {
+        createRequest(
+            with: URL(string: Constants.baseURL + "/search/movie?query=\(query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")&\(Constants.queries)"),
+            type: .GET) { request in
+                let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                    guard let data = data, error == nil else {
+                        compelition(.failure(APIError.failedToGetData))
+                        return
+                    }
+                    
+                    do {
+                        let result = try JSONDecoder().decode(CommonMoviesResponse.self, from: data)
+                        compelition(.success(result))
+                    }
+                    catch {
+                        compelition(.failure(error))
+                    }
+                }
+                task.resume()
+            }
+    }
+    
+    func getMoviesBy(genreId: Int, page: Int, compelition: @escaping (Result<CommonMoviesResponse, Error>) -> Void) {
+        createRequest(
+            with: URL(string: Constants.baseURL + "/discover/movie?with_genres=\(genreId)&page=\(page)&\(Constants.queries)"),
+            type: .GET) { request in
+                let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                    guard let data = data, error == nil else {
+                        compelition(.failure(APIError.failedToGetData))
+                        return
+                    }
+                    
+                    do {
+                        let result = try JSONDecoder().decode(CommonMoviesResponse.self, from: data)
+                        compelition(.success(result))
+                    }
+                    catch {
+                        compelition(.failure(error))
+                    }
+                }
+                task.resume()
+            }
+    }
+    
+    // MARK: - Genres
+    
+    func getGenres(compelition: @escaping (Result<GenresResponse, Error>) -> Void) {
+        createRequest(
+            with: URL(string: Constants.baseURL + "/genre/movie/list?\(Constants.queries)"),
+            type: .GET) { request in
+                let task = URLSession.shared.dataTask(with: request) { data, _, error in
+                    guard let data = data, error == nil else {
+                        compelition(.failure(APIError.failedToGetData))
+                        return
+                    }
+                    
+                    do {
+                        let result = try JSONDecoder().decode(GenresResponse.self, from: data)
+                        compelition(.success(result))
                     }
                     catch {
                         compelition(.failure(error))

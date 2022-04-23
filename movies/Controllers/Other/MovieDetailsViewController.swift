@@ -87,15 +87,10 @@ class MovieDetailsViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        let posterHeight: CGFloat = view.width / 1.3
+        let posterHeight: CGFloat = view.width/2 * 1.25
         let posterOffset: CGFloat = 30
         
-        scrollView.frame = view.bounds
-        scrollView.contentSize = CGSize(
-            width: view.width,
-            height: view.height * 3
-        )
-        
+        let rightSideX = view.width/2 + 20
         
         backdropImage.frame = CGRect(
             x: 0,
@@ -106,7 +101,7 @@ class MovieDetailsViewController: UIViewController {
         posterImage.frame = CGRect(
             x: 20,
             y: posterOffset,
-            width: view.width / 2 - 40,
+            width: view.width / 2 - 20,
             height: posterHeight
         )
         taglineLabel.frame = CGRect(
@@ -121,23 +116,29 @@ class MovieDetailsViewController: UIViewController {
             width: view.width - 40,
             height: 0
         )
-        releaseDate.frame = CGRect(
-            x: view.width/2,
+        rating.frame = CGRect(
+            x: rightSideX,
             y: posterImage.top + 20,
             width: view.width - 20,
             height: 50
         )
-        rating.frame = CGRect(
-            x: view.width/2,
-            y: (posterImage.bottom - 50 - 20) - (releaseDate.bottom - 50) - 50,
+        releaseDate.frame = CGRect(
+            x: rightSideX,
+            y: posterImage.bottom - 50 - 20,
             width: view.width - 20,
             height: 50
         )
         runtime.frame = CGRect(
-            x: view.width/2,
-            y: posterImage.bottom - 50 - 20,
+            x: rightSideX,
+            y: rating.bottom + (releaseDate.top - rating.bottom)/2 - 25,
             width: view.width - 20,
             height: 50
+        )
+        
+        scrollView.frame = view.bounds
+        scrollView.contentSize = CGSize(
+            width: view.width,
+            height: view.frame.height
         )
     }
     
@@ -160,8 +161,8 @@ class MovieDetailsViewController: UIViewController {
     }
     
     private func configureViews() {
-        backdropImage.sd_setImage(with: URL(string: APICaller.Constants.imagesURL + (movieDetails?.backdrop_path ?? "")))
-        posterImage.sd_setImage(with: URL(string: APICaller.Constants.imagesURL + (movieDetails?.poster_path ?? "")))
+        backdropImage.sd_setImage(with: URL(string: APICaller.Constants.imagesURL(size: .Backdrop) + (movieDetails?.backdrop_path ?? "")))
+        posterImage.sd_setImage(with: URL(string: APICaller.Constants.imagesURL(size: .Big) + (movieDetails?.poster_path ?? "")))
         
         taglineLabel.text = movieDetails?.tagline ?? ""
         
@@ -174,7 +175,7 @@ class MovieDetailsViewController: UIViewController {
             releaseDate.configure(title: "Status", mainText: movieDetails?.status?.rawValue ?? "-")
         }
         
-        rating.configure(title: "Rating", mainText: "\(Float(movieDetails?.vote_average ?? 0))/10")
+        rating.configure(title: "Rating (\(movieDetails?.vote_count ?? 0) votes)", mainText: "\(Float(movieDetails?.vote_average ?? 0))/10")
         runtime.configure(title: "Runtime", mainText: "\(movieDetails?.runtime ?? 0) min")
         
     }

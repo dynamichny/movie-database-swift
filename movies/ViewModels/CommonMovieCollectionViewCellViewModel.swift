@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PopularMoviesCollectionViewCellViewModel {
+struct CommonMovieCollectionViewCellViewModel {
     let title: String
     let coverURL: URL?
 }

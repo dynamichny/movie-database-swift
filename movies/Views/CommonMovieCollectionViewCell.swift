@@ -8,7 +8,7 @@
 import UIKit
 import SDWebImage
 
-class PopularMoviesCollectionViewCell: UICollectionViewCell {
+class CommonMovieCollectionViewCell: UICollectionViewCell {
     static let identifier = "PopularMoviesCollectionViewCell"
     
     private let nameLabel: UILabel = {
@@ -69,7 +69,7 @@ class PopularMoviesCollectionViewCell: UICollectionViewCell {
         posterImageView.image = nil
     }
     
-    func configure(with viewModel: PopularMoviesCollectionViewCellViewModel) {
+    func configure(with viewModel: CommonMovieCollectionViewCellViewModel) {
         nameLabel.text = viewModel.title
         posterImageView.sd_setImage(with: viewModel.coverURL, completed: nil)
     }
