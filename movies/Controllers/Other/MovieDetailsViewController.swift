@@ -10,7 +10,7 @@ import SDWebImage
 
 class MovieDetailsViewController: UIViewController {
     
-    private let movie: Movie
+    private let movieId: Int
     private var movieDetails: MovieDetails?
     
     private let scrollView = UIScrollView()
@@ -61,8 +61,8 @@ class MovieDetailsViewController: UIViewController {
     
     // MARK: - Lifecycle
     
-    init(movie: Movie) {
-        self.movie = movie
+    init(movieId: Int) {
+        self.movieId = movieId
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -82,6 +82,13 @@ class MovieDetailsViewController: UIViewController {
         scrollView.addSubview(releaseDate)
         scrollView.addSubview(rating)
         scrollView.addSubview(runtime)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "star"),
+            style: .plain,
+            target: self,
+            action: #selector(addToLibrary)
+        )
         
         fetchData()
     }
@@ -145,7 +152,7 @@ class MovieDetailsViewController: UIViewController {
     // MARK: - Private
     
     private func fetchData() {
-        APICaller.shared.getMovieDetailsFrom(id: movie.id) { [weak self] result in
+        APICaller.shared.getMovieDetailsFrom(id: movieId) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let model):
@@ -178,5 +185,21 @@ class MovieDetailsViewController: UIViewController {
         rating.configure(title: "Rating (\(movieDetails?.vote_count ?? 0) votes)", mainText: "\(Float(movieDetails?.vote_average ?? 0))/10")
         runtime.configure(title: "Runtime", mainText: "\(movieDetails?.runtime ?? 0) min")
         
+    }
+    
+    @objc private func addToLibrary() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let newPersistedMovie = PersistedMovie(context: context)
+        newPersistedMovie.title = movieDetails?.title ?? ""
+        newPersistedMovie.poster_path = movieDetails?.poster_path ?? ""
+        newPersistedMovie.release_date = movieDetails?.release_date ?? ""
+        newPersistedMovie.backdrop_path = movieDetails?.backdrop_path ?? ""
+        newPersistedMovie.id = Int64(movieId)
+        do {
+            try context.save()
+        }
+        catch {
+            print("error while saving movie")
+        }
     }
 }

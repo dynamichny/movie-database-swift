@@ -9,7 +9,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private var popularMoviesViewModels = [CommonMovieCollectionViewCellViewModel]()
+    private var popularMoviesViewModels = [PosterMovieCollectionViewCellViewModel]()
     private var movies = [Movie]()
     
     private var popularMoviesPage = 1
@@ -83,7 +83,7 @@ class HomeViewController: UIViewController {
                     self?.movies.append(contentsOf: model.results)
                     self?.popularMoviesViewModels.append(
                         contentsOf: model.results.compactMap({
-                            return CommonMovieCollectionViewCellViewModel(
+                            return PosterMovieCollectionViewCellViewModel(
                                 title: $0.title,
                                 coverURL: URL(string: APICaller.Constants.imagesURL(size: .Medium) + ($0.poster_path ?? ""))
                             )
@@ -105,8 +105,8 @@ class HomeViewController: UIViewController {
         view.addSubview(collectionView)
         
         collectionView.register(
-            CommonMovieCollectionViewCell.self,
-            forCellWithReuseIdentifier: CommonMovieCollectionViewCell.identifier
+            PosterMovieCollectionViewCell.self,
+            forCellWithReuseIdentifier: PosterMovieCollectionViewCell.identifier
         )
         
         collectionView.register(
@@ -130,9 +130,9 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: CommonMovieCollectionViewCell.identifier,
+            withReuseIdentifier: PosterMovieCollectionViewCell.identifier,
             for: indexPath
-        ) as? CommonMovieCollectionViewCell else {
+        ) as? PosterMovieCollectionViewCell else {
             return UICollectionViewCell()
         }
         
@@ -157,7 +157,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movie = movies[indexPath.row]
-        let vc = MovieDetailsViewController(movie: movie)
+        let vc = MovieDetailsViewController(movieId: movie.id)
         vc.title = movie.title
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)

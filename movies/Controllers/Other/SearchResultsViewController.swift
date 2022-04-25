@@ -61,7 +61,12 @@ extension SearchResultsViewController: UITableViewDelegate, UITableViewDataSourc
             return UITableViewCell()
         }
         
-        cell.configure(with: results[indexPath.row])
+        let movie = results[indexPath.row]
+        cell.configure(
+            with: SearchResultTableViewCellViewModel(
+                title: movie.title,
+                coverURL: URL(string: APICaller.Constants.imagesURL(size: .Small) + (movie.poster_path ?? "")))
+        )
         
         return cell
     }

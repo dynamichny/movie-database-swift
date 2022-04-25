@@ -9,7 +9,7 @@ import UIKit
 
 class MoviesViewController: UIViewController {
     
-    private var movieViewModels = [CommonMovieCollectionViewCellViewModel]()
+    private var movieViewModels = [PosterMovieCollectionViewCellViewModel]()
     private var movies = [Movie]()
     private let genre: Genre
     
@@ -85,7 +85,7 @@ class MoviesViewController: UIViewController {
                     self?.movies.append(contentsOf: model.results)
                     self?.movieViewModels.append(
                         contentsOf: model.results.compactMap({
-                            return CommonMovieCollectionViewCellViewModel(
+                            return PosterMovieCollectionViewCellViewModel(
                                 title: $0.title,
                                 coverURL: URL(string: APICaller.Constants.imagesURL(size: .Medium) + ($0.poster_path ?? ""))
                             )
@@ -107,8 +107,8 @@ class MoviesViewController: UIViewController {
         view.addSubview(collectionView)
         
         collectionView.register(
-            CommonMovieCollectionViewCell.self,
-            forCellWithReuseIdentifier: CommonMovieCollectionViewCell.identifier
+            PosterMovieCollectionViewCell.self,
+            forCellWithReuseIdentifier: PosterMovieCollectionViewCell.identifier
         )
         
         collectionView.register(
@@ -132,9 +132,9 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: CommonMovieCollectionViewCell.identifier,
+            withReuseIdentifier: PosterMovieCollectionViewCell.identifier,
             for: indexPath
-        ) as? CommonMovieCollectionViewCell else {
+        ) as? PosterMovieCollectionViewCell else {
             return UICollectionViewCell()
         }
         
@@ -146,7 +146,7 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let movie = movies[indexPath.row]
-        let vc = MovieDetailsViewController(movie: movie)
+        let vc = MovieDetailsViewController(movieId: movie.id)
         vc.title = movie.title
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)

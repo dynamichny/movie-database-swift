@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/marcinpawlicki/code/Personal/movies/movies/Models/PersistedMovie+CoreDataClass.swift">
+   </FileRef>
+   <FileRef
       location = "group:movies.xcodeproj">
    </FileRef>
    <FileRef

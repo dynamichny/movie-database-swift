@@ -40,6 +40,17 @@ class SearchViewController: UIViewController {
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8)
             
+            section.boundarySupplementaryItems = [
+                NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .absolute(50)
+                    ),
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+            ]
+            
             return section
         })
     )
@@ -58,6 +69,11 @@ class SearchViewController: UIViewController {
         collectionView.register(
             GenreCollectionViewCell.self,
             forCellWithReuseIdentifier: GenreCollectionViewCell.identifier
+        )
+        collectionView.register(
+            SectionHeaderCollectionReusableView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SectionHeaderCollectionReusableView.identifier
         )
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -113,7 +129,7 @@ extension SearchViewController: UISearchBarDelegate  {
 
 extension SearchViewController: SearchResultsViewControllerDelegate {
     func didTapResult(_ result: Movie) {
-        let vc = MovieDetailsViewController(movie: result)
+        let vc = MovieDetailsViewController(movieId: result.id)
         vc.title = result.title
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
@@ -147,5 +163,18 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let header = collectionView.dequeueReusableSupplementaryView(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: SectionHeaderCollectionReusableView.identifier,
+            for: indexPath
+        ) as? SectionHeaderCollectionReusableView else {
+            return UICollectionReusableView()
+        }
+        
+        header.configure(with: "Movie genres")
+        
+        return header
+    }
     
 }
