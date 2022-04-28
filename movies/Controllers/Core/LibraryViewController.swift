@@ -74,8 +74,8 @@ class LibraryViewController: UIViewController {
         }
         
         sections = [
-            LibraryTableSection(title: "Unreleased", results: unreleased),
-            LibraryTableSection(title: "Released", results: released)
+            LibraryTableSection(title: String.localized(key: "library.unreleased"), results: unreleased),
+            LibraryTableSection(title: String.localized(key: "library.released"), results: released)
         ]
         
         DispatchQueue.main.async {
@@ -132,7 +132,7 @@ extension LibraryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
     {
         let movieToRemove = sections[indexPath.section].results[indexPath.row]
-        let deleteAction = UIContextualAction(style: .destructive, title: "Remove") { (action, view, handler) in
+        let deleteAction = UIContextualAction(style: .destructive, title: String.localized(key: "library.remove")) { (action, view, handler) in
             self.context.delete(movieToRemove)
             try! self.context.save()
             self.fetchPersistedMovies()

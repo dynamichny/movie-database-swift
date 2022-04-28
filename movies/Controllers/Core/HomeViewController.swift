@@ -57,7 +57,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title  = "Home"
+        title  = String.localized(key: "screen_names.home")
         view.backgroundColor = .systemBackground
         
         configureCollectionView()
@@ -150,7 +150,7 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
             return UICollectionReusableView()
         }
         
-        header.configure(with: "Popular movies")
+        header.configure(with: String.localized(key: "home.popular_movies_subtitle"))
         
         return header
     }

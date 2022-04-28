@@ -177,13 +177,20 @@ class MovieDetailsViewController: UIViewController {
         overviewLabel.sizeToFit()
         
         if let release_date = movieDetails?.release_date  {
-            releaseDate.configure(title: "Release date", mainText: "\(String.formattedDate(string: release_date))")
-        } else {
-            releaseDate.configure(title: "Status", mainText: movieDetails?.status?.rawValue ?? "-")
+            releaseDate.configure(
+                title: String.localized(key: "movie_details.release_date"),
+                mainText: "\(String.formattedDate(string: release_date))"
+            )
         }
         
-        rating.configure(title: "Rating (\(movieDetails?.vote_count ?? 0) votes)", mainText: "\(Float(movieDetails?.vote_average ?? 0))/10")
-        runtime.configure(title: "Runtime", mainText: "\(movieDetails?.runtime ?? 0) min")
+        rating.configure(
+            title: "\(String.localized(key: "movie_details.rating")) (\(movieDetails?.vote_count ?? 0) votes)",
+            mainText: "\(Float(movieDetails?.vote_average ?? 0))/10"
+        )
+        runtime.configure(
+            title: String.localized(key: "movie_details.runtime"),
+            mainText: "\(movieDetails?.runtime ?? 0) min"
+        )
         
     }
     

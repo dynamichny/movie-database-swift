@@ -28,7 +28,7 @@ final class APICaller {
             }
             return "https://image.tmdb.org/t/p/original"
         }
-        static let queries = "region=\(Locale.current.regionCode?.uppercased() ?? "EN")&language=\(Locale.current.identifier)&api_key=\(Constants.apiKey)"
+        static let queries = "region=\(Locale.current.regionCode?.uppercased() ?? "EN")&language=\(Locale.current.languageCode ?? "en")&api_key=\(Constants.apiKey)"
     }
     
     enum APIError: Error {

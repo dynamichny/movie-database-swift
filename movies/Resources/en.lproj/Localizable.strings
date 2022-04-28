@@ -1,0 +1,12 @@
+"screen_names.home" = "Home";
+"screen_names.search" = "Search";
+"screen_names.library" = "Library";
+"home.popular_movies_subtitle" = "Popular movies";
+"search.search_placeholder" = "Movie title";
+"search.genres_subtitle" = "Movie genres";
+"library.unreleased" = "Unreleased";
+"library.released" = "Released";
+"library.remove" = "Remove";
+"movie_details.rating" = "Rating";
+"movie_details.runtime" = "Runtime";
+"movie_details.release_date" = "Release date";

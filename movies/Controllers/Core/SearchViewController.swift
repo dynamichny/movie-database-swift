@@ -13,7 +13,7 @@ class SearchViewController: UIViewController {
     
     private let searchController: UISearchController = {
         let vc = UISearchController(searchResultsController: SearchResultsViewController())
-        vc.searchBar.placeholder = "Movie title"
+        vc.searchBar.placeholder = String.localized(key: "search.search_placeholder")
         vc.searchBar.searchBarStyle = .minimal
         vc.definesPresentationContext = true
         return vc
@@ -172,7 +172,7 @@ extension SearchViewController: UICollectionViewDelegate, UICollectionViewDataSo
             return UICollectionReusableView()
         }
         
-        header.configure(with: "Movie genres")
+        header.configure(with: String.localized(key: "search.genres_subtitle"))
         
         return header
     }

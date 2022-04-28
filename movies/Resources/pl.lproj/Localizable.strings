@@ -1,0 +1,12 @@
+"screen_names.home" = "Strona główna";
+"screen_names.search" = "Szukaj";
+"screen_names.library" = "Biblioteka";
+"home.popular_movies_subtitle" = "Popularne filmy";
+"search.search_placeholder" = "Tytuł filmu";
+"search.genres_subtitle" = "Gatunki filmów";
+"library.unreleased" = "Przed premierą";
+"library.released" = "Wydane";
+"library.remove" = "Usuń";
+"movie_details.rating" = "Oceny";
+"movie_details.runtime" = "Długość filmu";
+"movie_details.release_date" = "Data premiery";

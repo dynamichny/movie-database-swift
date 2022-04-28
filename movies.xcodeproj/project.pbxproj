@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F62D6545281AE523006C10E0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F62D6547281AE523006C10E0 /* Localizable.strings */; };
 		F6548A582809B7C50003D986 /* PosterMovieCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6548A572809B7C50003D986 /* PosterMovieCollectionViewCell.swift */; };
 		F6548A5A2809BF6C0003D986 /* PosterMovieCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6548A592809BF6C0003D986 /* PosterMovieCollectionViewCellViewModel.swift */; };
 		F65DF579280EFE280069100A /* SectionHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F65DF578280EFE280069100A /* SectionHeaderCollectionReusableView.swift */; };
@@ -60,6 +61,9 @@
 		5BE9CAE698E271292CE92368 /* Pods-movies.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-movies.debug.xcconfig"; path = "Target Support Files/Pods-movies/Pods-movies.debug.xcconfig"; sourceTree = "<group>"; };
 		8D9F72E989AA1D58250A2F8C /* Pods_movies.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_movies.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE1C01DECF78C95F9CA9338B /* Pods-movies.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-movies.release.xcconfig"; path = "Target Support Files/Pods-movies/Pods-movies.release.xcconfig"; sourceTree = "<group>"; };
+		F62D6542281AE4ED006C10E0 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F62D6546281AE523006C10E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F62D6548281AE529006C10E0 /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F6548A572809B7C50003D986 /* PosterMovieCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterMovieCollectionViewCell.swift; sourceTree = "<group>"; };
 		F6548A592809BF6C0003D986 /* PosterMovieCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosterMovieCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		F65DF578280EFE280069100A /* SectionHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
@@ -177,6 +181,7 @@
 			children = (
 				F6A7DD6B2815BFC900FB319E /* Movies.xcdatamodeld */,
 				F67CE90D2808710C00821EA1 /* Assets.xcassets */,
+				F62D6547281AE523006C10E0 /* Localizable.strings */,
 				F67CE9042808710600821EA1 /* AppDelegate.swift */,
 				F67CE9062808710600821EA1 /* SceneDelegate.swift */,
 				F67CE9442808796400821EA1 /* Constants.swift */,
@@ -347,6 +352,7 @@
 			knownRegions = (
 				en,
 				Base,
+				pl,
 			);
 			mainGroup = F67CE8F82808710600821EA1;
 			productRefGroup = F67CE9022808710600821EA1 /* Products */;
@@ -366,6 +372,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F67CE9112808710C00821EA1 /* LaunchScreen.storyboard in Resources */,
+				F62D6545281AE523006C10E0 /* Localizable.strings in Resources */,
 				F67CE90E2808710C00821EA1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -493,10 +500,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		F62D6547281AE523006C10E0 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F62D6546281AE523006C10E0 /* en */,
+				F62D6548281AE529006C10E0 /* pl */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		F67CE90F2808710C00821EA1 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				F67CE9102808710C00821EA1 /* Base */,
+				F62D6542281AE4ED006C10E0 /* pl */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -508,6 +525,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -568,6 +586,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";

@@ -66,4 +66,14 @@ extension String {
         
         return DateFormatter.displayDateFormatter.string(from: date)
     }
+    
+    static func localized(key: String) -> String {
+        return NSLocalizedString(
+            key,
+            tableName: "Localizable",
+            bundle: .main,
+            value: key,
+            comment: key
+        )
+    }
 }
