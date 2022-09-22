@@ -25,6 +25,7 @@ class GenreCollectionViewCell: UICollectionViewCell {
         label.textColor = .label
         label.font = .systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .right
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     

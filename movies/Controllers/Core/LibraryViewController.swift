@@ -25,12 +25,24 @@ class LibraryViewController: UIViewController {
         return tableView
     }()
     
+    private let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .secondaryLabel
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.isHidden = true
+        label.text = String.localized(key: "library.empty")
+        label.textAlignment = .center
+        
+        return label
+    }()
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.addSubview(tableView)
+        tableView.addSubview(emptyLabel)
         tableView.delegate = self
         tableView.dataSource = self
     }
@@ -38,6 +50,7 @@ class LibraryViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+        emptyLabel.frame = tableView.bounds
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +76,8 @@ class LibraryViewController: UIViewController {
         var released: [PersistedMovie] = []
         var unreleased: [PersistedMovie] = []
         
+        emptyLabel.isHidden = !results.isEmpty
+    
         for result in results {
             if let dateString = result.release_date,
                let releaseDate = DateFormatter.dateFormatter.date(from: dateString),
@@ -73,10 +88,15 @@ class LibraryViewController: UIViewController {
             released.append(result)
         }
         
-        sections = [
-            LibraryTableSection(title: String.localized(key: "library.unreleased"), results: unreleased),
-            LibraryTableSection(title: String.localized(key: "library.released"), results: released)
-        ]
+        sections = []
+        
+        if unreleased.count > 0 {
+            sections.append(LibraryTableSection(title: String.localized(key: "library.unreleased"), results: unreleased))
+        }
+        
+        if released.count > 0 {
+            sections.append(LibraryTableSection(title: String.localized(key: "library.released"), results: released))
+        }
         
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -142,6 +162,5 @@ extension LibraryViewController: UITableViewDelegate, UITableViewDataSource {
         configuration.performsFirstActionWithFullSwipe = false
         return configuration
     }
-    
     
 }

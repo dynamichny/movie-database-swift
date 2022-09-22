@@ -10,3 +10,4 @@
 "movie_details.rating" = "Rating";
 "movie_details.runtime" = "Runtime";
 "movie_details.release_date" = "Release date";
+"library.empty" = "Library is empty";
